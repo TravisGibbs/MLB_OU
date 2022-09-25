@@ -6,4 +6,6 @@ html, body {
 body {
     height: 100vh;
     width: 100vw;
+    background-image: url('http://i.stack.imgur.com/kx8MT.gif');
+    background-size: cover;
 }
