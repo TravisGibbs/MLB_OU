@@ -2,6 +2,7 @@ import string
 import httplib2
 from bs4 import BeautifulSoup, SoupStrainer
 import json
+from itertools import chain
 
 def js_list(encoder, data):
     pairs = []
@@ -55,15 +56,21 @@ def grab_players_dict(page_links):
                         
     return d_players
 
-def get_all_players():
+def get_active_players():
+    links = []
     alphabet_list = list(string.ascii_lowercase)
     http = httplib2.Http()
     for letter in alphabet_list:
         status, response = http.request('https://www.baseball-reference.com/players/'+letter+'/')
-        for link in BeautifulSoup(response, parse_only=SoupStrainer('a'), features="html.parser"):
-            if link.has_attr('href'):
-                if 'player' in link['href'] and 'shtml' in link['href'] and 'pronunciation' not in link['href']:
-                    print(link['href'])
+        for strong_text in BeautifulSoup(response, parse_only=SoupStrainer('strong'), features="html.parser"):
+            for link in list(strong_text.children):
+                try:
+                    if link.has_attr('href'):
+                        if 'player' in link['href'] and 'shtml' in link['href'] and 'pronunciation' not in link['href']:
+                            links.append(link['href'])
+                except:
+                    pass
+    return links
     
 def get_HOF():
     links = []
@@ -72,7 +79,8 @@ def get_HOF():
     for link in BeautifulSoup(response, parse_only=SoupStrainer('a'), features="html.parser"):
         if link.has_attr('href'):
             if 'players/' in link['href'] and 'shtml' in link['href'] and 'pronunciation' not in link['href']:
-                print(link['href'])
+                links.append(link['href'])
+    return links
 
 def get_WAR_leaders():
     links = set()
@@ -84,7 +92,12 @@ def get_WAR_leaders():
                 links.add(link['href'])
     return links
 
-d_players = grab_players_dict(get_WAR_leaders())
+war_players_set = set(get_WAR_leaders())
+hof_players_set = set(get_HOF())
+active_players_set = set(get_active_players())
+print(len(war_players_set), len(hof_players_set), len(active_players_set))
+players_set = set(chain(war_players_set, hof_players_set, active_players_set))
+d_players = grab_players_dict(list(players_set))
 encoder = json.JSONEncoder(ensure_ascii=False)
 js_obj = js_val(encoder, d_players)
 
