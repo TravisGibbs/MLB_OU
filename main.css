@@ -6,6 +6,35 @@ html, body {
 body {
     height: 100vh;
     width: 100vw;
-    background-image: url('http://i.stack.imgur.com/kx8MT.gif');
-    background-size: cover;
+    background-image: url('https://media.giphy.com/media/pfjpGYvLMwZ89WOUNz/giphy.gif');
+    background-position: center;
+    background-size: 100vw, 120vh;
+}
+
+.noPadMargin {
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+h1 {
+    color: white;
+}
+
+.fullHeight {
+    height: 100vh;
+}
+
+.flexContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.flexItem {
+    flex: 0 0 120px;
+}
+
+container {
+    width: 100%;
+    padding: 0;
 }

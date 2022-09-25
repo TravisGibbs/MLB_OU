@@ -2,6 +2,10 @@
 <html>
     <head>
         <style> 
+            @font-face {
+                font-family: mainFont;
+                src: url("static/CMLBBLOCK.TTF") format("opentype");
+            }
             .center {
                 text-align: center !important;
                 align-content: center;
@@ -21,21 +25,23 @@
         <link rel="stylesheet" href="main.css">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light color1-background bg-light">
-            <h1 style="font-family: mainFont; color:darkslategrey;" class="navbar-brand" href="#">MLB OU</h1>
-          
-              <!-- <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <button id="rules-button" class="btn color3 font color1-background" href="">Learn to Play!</button>
-                </li>
-                <li class="nav-item">
-                  <button id="refresh-button" class="btn color3 font color1-background" href="">New Character</button>
-                </li> -->
-          </nav>
-        <div class="container color3-background">
-            <div class="mgn-top center">
+        <div class="color3-background" id="dialog" title="Rules">
+            <h3 class="font">Welcome to the MLB Gauntlet, earn points by picking the player with higher value of any given stat.</h3>
+            <hr>
+            <h6 class="font">All active players, hall of famers, and the top 1000 career WAR players are included!</h6>
+            <br>
+            <h6 class="font">At the top of the screen a stat will appear with the label showing it as a career AVG or total, simply pick the player with the better number and win!</h6>
+            <br>
+            <h6 class="font"><i>How many can you get correct in a row?</i></h6>
+            <br>
+        </div>
+        <div class="row fullHeight noPadMargin">
+            <div class="col flexContainer noPadMargin">
+                <div class="flexItem">
+                    <h1 class="font"><b><a href="/play">Get Started!</a></b></h1>
+                </div>
             </div>
-            <div class="row center">
+            <div class="col">
             </div>
         </div>
     </body>
