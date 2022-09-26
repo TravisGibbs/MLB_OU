@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    console.log("found")
     if (window.innerWidth/2 < 650) {
         width = innerWidth
         $('#form-con').removeClass('web-width')
@@ -10,4 +11,5 @@ $(document).ready(function(){
     $( "#dialog" ).dialog({
         width: width
     });
+    
 });

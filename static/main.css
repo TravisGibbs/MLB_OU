@@ -1,0 +1,97 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+    background-color: black;
+}
+
+.player-panel {
+    background-position: center;
+    background-size: 50vw, 40vh;
+    background-repeat: no-repeat;
+    filter: grayscale(50%);
+}
+
+.flexContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.main-body {
+    height: 100vh;
+    width: 100vw;
+    background-image: url('https://media.giphy.com/media/pfjpGYvLMwZ89WOUNz/giphy.gif');
+    background-position: center;
+    background-size: 100vw, 100vh;
+}
+
+.noPadMargin {
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+h3 {
+    color: white;
+    margin: auto;
+}
+
+.ninety {
+    height: 95vh;
+}
+
+.box {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 20%;
+    margin: auto;
+    text-align: center;
+    vertical-align: bottom;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    padding: 20px 40px;
+    z-index: 4;
+  }
+
+.fullHeight {
+    height: 100vh;
+}
+
+.redsxred {
+    color: white;
+    background-color: #BD3039;
+
+}
+
+.item {
+    margin: auto;
+}
+
+.five {
+    height: 5vh;
+  }
+
+.flexItem {
+    text-align: center;
+    color: white;
+    width: 40vw;
+    height: 40vh;
+    margin: auto;
+}
+
+.selected {
+    filter:brightness(75%) saturate(140%);
+}
+
+.correct {
+    color: aqua;
+    background-image: -moz-linear-gradient();
+    background-color: lightgreen;
+    backdrop-filter: opacity(50%);
+}
+
+container {
+    width: 100%;
+    padding: 0;
+}

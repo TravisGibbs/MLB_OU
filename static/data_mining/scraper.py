@@ -4,27 +4,6 @@ from bs4 import BeautifulSoup, SoupStrainer
 import json
 from itertools import chain
 
-def js_list(encoder, data):
-    pairs = []
-    for v in data:
-        pairs.append(js_val(encoder, v))
-    return "[" + ", ".join(pairs) + "]"
-
-def js_dict(encoder, data):
-    pairs = []
-    for k, v in data.items():
-        pairs.append(k + ": " + js_val(encoder, v))
-    return "{" + ", ".join(pairs) + "}"
-
-def js_val(encoder, data):
-    if isinstance(data, dict):
-        val = js_dict(encoder, data)
-    elif isinstance(data, list):
-        val = js_list(encoder, data)
-    else:
-        val = encoder.encode(data)
-    return val
-
 def grab_players_dict(page_links):
     d_players = dict()
     http = httplib2.Http()
@@ -32,7 +11,7 @@ def grab_players_dict(page_links):
         status, response = http.request('https://www.baseball-reference.com/'+link)
         for img in BeautifulSoup(response, parse_only=SoupStrainer('img'), features="html.parser"):
             if 'Photo of ' in img['alt']:
-                player_name = img['alt'].lstrip('Photo of ')
+                player_name = img['alt'].split('Photo of ')[1]
                 d_players[player_name] = dict() 
                 d_players[player_name]['img'] = img['src']
                 break
@@ -98,8 +77,8 @@ active_players_set = set(get_active_players())
 print(len(war_players_set), len(hof_players_set), len(active_players_set))
 players_set = set(chain(war_players_set, hof_players_set, active_players_set))
 d_players = grab_players_dict(list(players_set))
-encoder = json.JSONEncoder(ensure_ascii=False)
-js_obj = js_val(encoder, d_players)
+print(str(len(d_players.keys()))+ " players wrote to file!")
+js_obj = json.dumps(d_players)
 
 file = open('player_data.txt', 'w')
 file.write(js_obj)
