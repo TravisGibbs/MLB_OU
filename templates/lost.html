@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            let s = {{ score| tojson}}
+            let text = {{ text| tojson}}
+            let url = {{gif_url| tojson}}
+            console.log(url)
+        </script>
+        <style> 
+            @font-face {
+                font-family: mainFont;
+                src: url("static/MLBBLOCK.TTF") format("opentype");
+            }
+            .center {
+                text-align: center !important;
+                align-content: center;
+            }
+
+            .font {
+                font-family: mainFont;
+            }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"crossorigin="anonymous">
+        <script type="text/javascript" src="../static/lost.js"></script>
+        <link rel="stylesheet" href="../static/main.css">
+    </head>
+    <body  class="main-body gray-scale" style="background-image: url({{gif_url}}) !important;">
+        <div class="row fullHeight noPadMargin">
+            <div class="col flexContainer noPadMargin">
+                <div class="flexItem">
+                    <h1>Score: {{score}}</h1>
+                    <h3>{{text}}</h3>
+                    <br>
+                    <a type="button" id="play-btn" href="/play" class="btn redsxred btn-lg font">Play Again</a>
+                </div>
+            </div>
+            <div class="col flexContainer noPadMargin">
+            </div>
+        </div>
+    </body>
+</html>

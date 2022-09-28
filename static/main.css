@@ -17,11 +17,20 @@ html, body {
     align-items: center;
   }
 
+.small-height {
+    height: 5vh;
+}
+
+.gray-scale {
+    filter: grayscale(75%);
+}
+
 .main-body {
     height: 100vh;
     width: 100vw;
     background-image: url('https://media.giphy.com/media/pfjpGYvLMwZ89WOUNz/giphy.gif');
     background-position: center;
+    background-repeat: no-repeat;
     background-size: 100vw, 100vh;
 }
 
@@ -36,7 +45,7 @@ h3 {
 }
 
 .ninety {
-    height: 95vh;
+    height: 94vh;
 }
 
 .box {
@@ -48,8 +57,6 @@ h3 {
     margin: auto;
     text-align: center;
     vertical-align: bottom;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
     padding: 20px 40px;
     z-index: 4;
   }
@@ -62,6 +69,14 @@ h3 {
     color: white;
     background-color: #BD3039;
 
+}
+
+.outs {
+    width:100vw ;display: flex; justify-content: flex-end; align-items: center;
+}
+
+.credit {
+    margin-top: -4vh !important;
 }
 
 .item {
@@ -81,14 +96,48 @@ h3 {
 }
 
 .selected {
-    filter:brightness(75%) saturate(140%);
+    backdrop-filter:brightness(75%) saturate(140%) !important;
 }
 
 .correct {
-    color: aqua;
-    background-image: -moz-linear-gradient();
     background-color: lightgreen;
-    backdrop-filter: opacity(50%);
+    filter: opacity(50%);
+}
+
+.wrong {
+    background-color: lightcoral;
+    filter: opacity(50%);
+}
+
+.hack {
+    margin-top: -94vh;
+    margin-right: 0px;
+    margin-left: 0px;
+    z-index: 10;
+}
+
+.dot {
+    height: 3vh;
+    width: 3vh;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: .2vw;
+  }
+
+.right {
+    text-align: right;
+    width: 100vw;
+}
+
+.abs {
+    position: absolute;
+}
+
+.score {
+    color: white;
+    margin-top: -99.5vh !important;
+    position: absolute;
 }
 
 container {

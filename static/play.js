@@ -1,8 +1,16 @@
 var score = 0
+var q_num = 0
 var answer = 0
 var left = 0
 var right = 0
+var answerin = false
+var timeout = 1500
+var lives = 4
 
+function lose() {
+    console.log("lost score: "+score.toString())
+    window.location.href= "/lost/"+score.toString()
+}
 
 function wait(milliseconds){
     return new Promise(resolve => {
@@ -24,13 +32,12 @@ function sleep (time) {
 function set_question(q) {
     const  players = q['players']
     const col = q['col']
-    const row = q['row']
 
     $( '#player_col_2' ).removeClass('correct')
     $( '#player_col_1' ).removeClass('correct')
 
     set_players(players)
-
+    console.log(players)
     if (players[0]['value'] > players[1]['value']) {
         answer = 0
     } else if (players[1]['value'] > players[0]['value']) {
@@ -38,12 +45,8 @@ function set_question(q) {
     } else {
         answer = 2
     }
-    let question_str = "Who had more " + col
-    if (row == "totals") {
-        question_str += " in their career?"
-    } else {
-        question_str += " on avg per 162 game season?"
-    }
+    console.log(answer)
+    let question_str = col
     $('#question').text(question_str)
 }
 
@@ -59,52 +62,89 @@ $(document).ready(function(){
 
     set_question(qs[score])
 
-    $('#player_col_1').hover(
+    $('#front_1').hover(
         function() {
-            
-          $( '#player_col_1' ).addClass('selected')
+            if (!answerin) {
+                $( '#front_1' ).addClass('selected')
+            }
         }, function() {
-          $( '#player_col_1' ).removeClass('selected')
+            if (!answerin) {
+                $( '#front_1' ).removeClass('selected')
+            }
         }
       );
 
-    $('#player_col_2').hover(
+    $('#front_2').hover(
         function() {
-            $( '#player_col_2' ).addClass('selected')
+            if (!answerin) {
+                $( '#front_2' ).addClass('selected')
+            }
         }, function() {
-            $( '#player_col_2' ).removeClass('selected')
+            if (!answerin) {
+                $( '#front_2' ).removeClass('selected')
+            }
         }
     );
 
-    $('#player_col_1').click(function() {
-        // Animate numbers to show correct answer
-        // Highlight correct player green and wait a few seconds
-        $( '#player_col_1' ).removeClass('selected')
-        $( '#player_col_2' ).removeClass('selected')
-        if (answer == 0 || answer == 2) {
-            $( '#player_col_1' ).addClass('correct')
-            console.log("here")
+    $('#front_1').click(function() {
+        if (!answerin) {
+            answerin = true
+            // Animate numbers to show correct answer
+            // Highlight correct player green and wait a few seconds
+            $( '#front_1' ).removeClass('selected')
+            $( '#front_2' ).removeClass('selected')
+            $('#player_text_1').text(qs[q_num]['players'][0]['value'])
+            $('#player_text_2').text(qs[q_num]['players'][1]['value'])
+            if (answer == 0 || answer == 2) {
+                $( '#front_1' ).addClass('correct')
+                score = score + 1
+            } else {
+                $( '#front_1' ).addClass('wrong')
+                lives = lives-1
+                $('#out_'+lives).css("background-color", "#D50032")
+                if (lives == 1) {
+                    lose()
+                }
+            }
+            $('#score').text("Score " + score.toString())
+            q_num = q_num+1
+            setTimeout(function(){
+                $( '#front_1' ).removeClass('correct')
+                $( '#front_1' ).removeClass('wrong')
+                set_question(qs[q_num])     
+                answerin = false
+            },timeout);
         }
-        score = score+1
-        setTimeout(function(){
-            set_question(qs[score])     
-        },5000);
-
       });
 
-    $('#player_col_2').click(function() {
-        // Animate numbers to show correct answer
-        // Highlight correct player green and wait a few seconds
-        $( '#player_col_1' ).removeClass('selected')
-        $( '#player_col_2' ).removeClass('selected')
-        if (answer == 1 || answer == 2) {
-            $( '#player_col_2' ).addClass('correct')
-            console.log("here")
+    $('#front_2').click(function() {
+        if (!answerin) {
+            answerin = true
+            // Animate numbers to show correct answer
+            // Highlight correct player green and wait a few seconds
+            $( '#front_1' ).removeClass('selected')
+            $( '#front_2' ).removeClass('selected')
+            $('#player_text_1').text(qs[q_num]['players'][0]['value'])
+            $('#player_text_2').text(qs[q_num]['players'][1]['value'])
+            if (answer == 1 || answer == 2) {
+                $( '#front_2' ).addClass('correct')
+                score = score+1
+            } else {
+                $( '#front_2' ).addClass('wrong')
+                lives = lives-1
+                $('#out_'+lives).css("background-color", "#D50032")
+                if (lives == 1) {
+                    lose()
+                }
+            }
+            $('#score').text("Score " + score.toString())
+            q_num = q_num+1
+            setTimeout(function(){
+                $( '#front_2' ).removeClass('correct')
+                $( '#front_2' ).removeClass('wrong')
+                set_question(qs[q_num])
+                answerin = false     
+            },timeout);
         }
-        score = score+1
-        setTimeout(function(){
-            set_question(qs[score])     
-        },5000);
-           
     });
 });

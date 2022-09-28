@@ -28,11 +28,10 @@
         <link rel="stylesheet" href="../static/main.css">
     </head>
     <body>
-        <div class="row  flex noPadMargin">
+        <div class="row small-height noPadMargin">
             <h3 id="question"></h3>
         </div>
         <div class="row ninety noPadMargin">
-                
             <div id="player_col_1" class="col player-panel noPadMargin">
                 <div class="">
                     <h1 class="box" id="player_text_1"></h1>
@@ -43,6 +42,26 @@
                     <h1 class="box" id="player_text_2"></h1>
                 </div>
             </div>
+        </div>
+        <div class="row ninety hack">
+            <div id="front_1" class="col player-panel noPadMargin">
+            </div>
+            <div id="front_2" class="col player-panel noPadMargin">
+            </div>
+        </div>
+        <div class="row noPadMargin score">
+            <h2 id="score">Score: 0</h2>
+        </div>
+        <div class="abs row noPadMargin credit">
+            <h6>Photos and Data Courtesy of Baseball Reference</h6>
+        </div>
+        <div class="row noPadMargin score right">
+            <div class="outs">
+                <h2>Outs:</h2>
+                <span id="out_1" class="dot"></span>
+                <span id="out_2" class="dot"></span>
+                <span id="out_3" class="dot"></span>
+              </div>
         </div>
     </body>
 </html>

@@ -4,6 +4,39 @@ from bs4 import BeautifulSoup, SoupStrainer
 import json
 from itertools import chain
 
+stat_translator = {
+        "W": "more Wins",
+        "L": "more Losses",
+        "win_loss_perc": "a higher Win Loss Percentage",
+        "earned_run_average": "a higher ERA",
+        "G": "more Games Played",
+        "IP": "more Innings Pitched",
+        "SV": "more Saves",
+        "SHO": "more Shoutouts",
+        "CG": "more Complete Games",
+        "HR": "more Home Runs Allowed",
+        "SO": "more Strike Outs",
+        "earned_run_avg_plus": "a higher ERA+",
+        "fip": "a higher FIP",
+        "whip": "a higher WHIP",
+        "hits_per_nine": "a higher H/9",
+        "home_runs_per_nine": "a higher HR/9",
+        "AB": "more At Bats",
+        "R": "more Runs",
+        "RBI": "more RBIs",
+        "H": "more Hits",
+        "HR": "more Home Runs",
+        "SB": "more Stolen Bases",
+        "BB": "more BB",
+        "SO": "more SO",
+        "batting_avg": "a higher batting avg",
+        "onbase_perc": "a higher on base percentage",
+        "slugging_perc": "a higher slugging percentage",
+        "onbase_plus_slugging": "a higher ops",
+        "onbase_plus_slugging_plus": "a higher ops+",
+        "TB": "more total bases"
+}
+
 def grab_players_dict(page_links):
     d_players = dict()
     http = httplib2.Http()
@@ -27,11 +60,9 @@ def grab_players_dict(page_links):
                     d_players[player_name][table_name]["totals"] = dict()
                     for stat in rows[0].findChildren("td"):
                         if len(list(stat.children)) >0:
-                            d_players[player_name][table_name]["totals"][str(stat['data-stat'])] = next(stat.children).string
-                    d_players[player_name][table_name]["avg"] = dict()
-                    for stat in rows[1].findChildren("td"):
-                        if len(list(stat.children)) >0:
-                            d_players[player_name][table_name]["avg"][str(stat['data-stat'])] = next(stat.children).string
+                            stat_name = str(stat['data-stat'])
+                            if stat_name in stat_translator:
+                                d_players[player_name][table_name]["totals"][stat_translator[stat_name]] = next(stat.children).string
                         
     return d_players
 
