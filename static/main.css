@@ -6,7 +6,7 @@ html, body {
 
 .player-panel {
     background-position: center;
-    background-size: 40vw, 40vh;
+    background-size: 50vw, 40vh;
     background-repeat: no-repeat;
     filter: grayscale(50%);
     height: 85vh;
