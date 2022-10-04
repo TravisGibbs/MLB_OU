@@ -6,10 +6,10 @@ html, body {
 
 .player-panel {
     background-position: center;
-    background-size: 50vw, 40vh;
+    background-size: 40vw, 40vh;
     background-repeat: no-repeat;
     filter: grayscale(50%);
-    height: 90vh;
+    height: 85vh;
 }
 
 .flexContainer {
@@ -19,7 +19,7 @@ html, body {
   }
 
 .small-height {
-    height: 4vh;
+    height: 5vh;
 }
 
 .gray-scale {
@@ -46,14 +46,14 @@ h3 {
 }
 
 .ninety {
-    height: 90vh;
+    height: 85vh;
 }
 
 .box {
     background-color: rgba(255, 255, 255, 0.5);
     color: black;
     border-radius: 5px;
-    width: 100%;
+    width: 80%;
     margin-top: 20%;
     margin: auto;
     text-align: center;
@@ -116,10 +116,10 @@ h3 {
 }
 
 .hack {
-    margin-top: -90vh;
+    margin-top: -85vh;
     margin-right: 0px;
     margin-left: 0px;
-    height: 90vh;
+    height: 85vh;
     z-index: 10;
 }
 
