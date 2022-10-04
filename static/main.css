@@ -9,6 +9,7 @@ html, body {
     background-size: 50vw, 40vh;
     background-repeat: no-repeat;
     filter: grayscale(50%);
+    height: 90vh;
 }
 
 .flexContainer {
@@ -18,7 +19,7 @@ html, body {
   }
 
 .small-height {
-    height: 5vh;
+    height: 4vh;
 }
 
 .gray-scale {
@@ -45,7 +46,7 @@ h3 {
 }
 
 .ninety {
-    height: 94vh;
+    height: 90vh;
 }
 
 .box {
@@ -62,7 +63,7 @@ h3 {
   }
 
 .fullHeight {
-    height: 100vh;
+    height: 100%;
 }
 
 .redsxred {
@@ -76,7 +77,8 @@ h3 {
 }
 
 .credit {
-    margin-top: -4vh !important;
+    margin-top: -10vh !important;
+    color: #BD3039;
 }
 
 .item {
@@ -109,10 +111,15 @@ h3 {
     filter: opacity(50%);
 }
 
+.white {
+    color: white;
+}
+
 .hack {
-    margin-top: -94vh;
+    margin-top: -90vh;
     margin-right: 0px;
     margin-left: 0px;
+    height: 90vh;
     z-index: 10;
 }
 
@@ -127,6 +134,7 @@ h3 {
 
 .right {
     text-align: right;
+    margin-top: -4vh !important;
     width: 100vw;
 }
 

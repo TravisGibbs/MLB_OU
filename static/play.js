@@ -51,14 +51,13 @@ function set_question(q) {
 }
 
 $(document).ready(function(){
-    var width = 0
-    if (window.innerWidth/2 < 650) {
-        width = innerWidth
-        $('#form-con').removeClass('web-width')
-        $('#form-con').addClass('mobile-width')
-    } else {
-        width =  window.innerWidth/2
-    }
+    // const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    // var height = window.innerHeight
+    // var width = window.innerWidth
+    // if (window.innerWidth/2 < 650) {
+    //     $('#outs').css('margin-top', (height*4/5).toString()+"px !important")
+    // }
 
     set_question(qs[score])
 
@@ -137,7 +136,7 @@ $(document).ready(function(){
                     lose()
                 }
             }
-            $('#score').text("Score " + score.toString())
+            $('#score').text("Score: " + score.toString())
             q_num = q_num+1
             setTimeout(function(){
                 $( '#front_2' ).removeClass('correct')
