@@ -2,6 +2,10 @@ import string
 import httplib2
 from bs4 import BeautifulSoup, SoupStrainer
 import json
+import urllib.request, urllib.parse, urllib.error
+import ssl
+from urllib.request import Request, urlopen
+
 from itertools import chain
 
 stat_translator = {
@@ -40,6 +44,7 @@ stat_translator = {
 def grab_players_dict(page_links):
     d_players = dict()
     http = httplib2.Http()
+    count = 0
     for i,link in enumerate(page_links):
         status, response = http.request('https://www.baseball-reference.com/'+link)
         for img in BeautifulSoup(response, parse_only=SoupStrainer('img'), features="html.parser"):
@@ -48,6 +53,8 @@ def grab_players_dict(page_links):
                 d_players[player_name] = dict() 
                 d_players[player_name]['img'] = img['src']
                 break
+        player_short_name = (link.split('.shtml')[0]).split('/players/')[1][2:]
+        d_players[player_name]['shortname'] = player_short_name
         table_soup = BeautifulSoup(response, features="html.parser")
         for table in table_soup.find_all('table', recursive=True):
             footers = table.findChildren("tfoot")
@@ -63,7 +70,20 @@ def grab_players_dict(page_links):
                             stat_name = str(stat['data-stat'])
                             if stat_name in stat_translator:
                                 d_players[player_name][table_name]["totals"][stat_translator[stat_name]] = next(stat.children).string
-                        
+        site= 'https://www.baseball-almanac.com/players/cards.php?p='+player_short_name
+        hdr = {'User-Agent': 'Mozilla/5.0'}
+        req = Request(site,headers=hdr)
+        page = urlopen(req)
+        soup = BeautifulSoup(page, features="lxml")
+        headers = soup.find_all('td',  {"class": "header"})
+        for header in headers:
+            children = header.findChildren("img" , recursive=False)
+            for child in children:
+                if child.has_attr('src'):
+                    d_players[player_name]['card'] =  "https://www.baseball-almanac.com/"+child['src']
+                    count += 1
+                    break
+    print(count/len(d_players))
     return d_players
 
 def get_active_players():

@@ -7,12 +7,32 @@ var answerin = false
 var timeout = 2000
 var lives = 4
 
-function animateValue(obj, start, end, duration) {
+Number.prototype.countDecimals = function () {
+
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+
+    var str = this.toString();
+    if (str.indexOf(".") !== -1 && str.indexOf("-") !== -1) {
+        return str.split("-")[1] || 0;
+    } else if (str.indexOf(".") !== -1) {
+        return str.split(".")[1].length || 0;
+    }
+    return str.split("-")[1] || 0;
+}
+
+function animateValue(obj, start, end, duration, decimals) {
     let startTimestamp = null;
     const step = (timestamp) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      obj.innerHTML = Math.floor(progress * (end - start) + start);
+      let number = Math.floor(progress * (end - start) + start);
+      if (decimals > 0) {
+        number = (number/(10**decimals)).toString()
+        obj.innerHTML = number
+      } else {
+        obj.innerHTML = number
+      }
+      
       if (progress < 1) {
         window.requestAnimationFrame(step);
       }
@@ -32,8 +52,10 @@ function wait(milliseconds){
   }
 
 function set_players(players) {
-    $('#player_col_1').css("background-image", "url("+players[0]["img"]+")")
-    $('#player_col_2').css("background-image", "url("+players[1]["img"]+")")
+    // $('#player_col_1').css("background-image", "url("+players[0]["img"]+")")
+    // $('#player_col_2').css("background-image", "url("+players[1]["img"]+")")
+    $('#player_img_1').attr("src",players[0]["img"]);
+    $('#player_img_2').attr("src",players[1]["img"]);
     $('#player_text_1').text(players[0]['name'])
     $('#player_text_2').text(players[1]['name'])
 }
@@ -108,9 +130,23 @@ $(document).ready(function(){
 
             let text_1 = document.getElementById('player_text_1');
             let text_2 = document.getElementById('player_text_2');
-            animateValue(text_1, 0, qs[q_num]['players'][0]['value'], 500)
-            animateValue(text_2, 0, qs[q_num]['players'][1]['value'], 500)
 
+            let value_1 = qs[q_num]['players'][0]['value']
+            let value_2 = qs[q_num]['players'][1]['value']
+
+            let decimals_1 = value_1.countDecimals()
+            let decimals_2 = value_2.countDecimals()
+
+            if (decimals_1 > 0) {
+                value_1 = value_1*(10**decimals_1)
+            }
+
+            if (decimals_2 > 0) {
+                value_2 = value_2*(10**decimals_2)
+            }
+
+            animateValue(text_1, 0, value_1, 500, decimals_1)
+            animateValue(text_2, 0, value_2, 500, decimals_2)
             
             setTimeout(function() {
                 if (answer == 0 || answer == 2) {
@@ -146,8 +182,23 @@ $(document).ready(function(){
             $( '#front_2' ).removeClass('selected')
             let text_1 = document.getElementById('player_text_1');
             let text_2 = document.getElementById('player_text_2');
-            animateValue(text_1, 0, qs[q_num]['players'][0]['value'], 500)
-            animateValue(text_2, 0, qs[q_num]['players'][1]['value'], 500)
+
+            let value_1 = qs[q_num]['players'][0]['value']
+            let value_2 = qs[q_num]['players'][1]['value']
+
+            let decimals_1 = value_1.countDecimals()
+            let decimals_2 = value_2.countDecimals()
+
+            if (decimals_1 > 0) {
+                value_1 = value_1*(10**decimals_1)
+            }
+
+            if (decimals_2 > 0) {
+                value_2 = value_2*(10**decimals_2)
+            }
+
+            animateValue(text_1, 0, value_1, 500, decimals_1)
+            animateValue(text_2, 0, value_2, 500, decimals_2)
 
             setTimeout(function() {
                 if (answer == 1 || answer == 2) {

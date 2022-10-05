@@ -40,6 +40,21 @@ html, body {
     margin: 0px !important;
 }
 
+.img {
+    width: 50vw;
+    height: 85vh;
+    object-fit: fill;
+}
+
+.width {
+    width: 50vw;
+}
+
+.ccrop {
+    object-fit:cover; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+}
+
 h3 {
     color: white;
     margin: auto;
