@@ -9,7 +9,7 @@ html, body {
     background-size: 50vw, 40vh;
     background-repeat: no-repeat;
     filter: grayscale(50%);
-    height: 85vh;
+    height: 83vh;
 }
 
 .flexContainer {
@@ -42,7 +42,7 @@ html, body {
 
 .img {
     width: 50vw;
-    height: 85vh;
+    height: 83vh;
     object-fit: fill;
 }
 
@@ -61,7 +61,7 @@ h3 {
 }
 
 .ninety {
-    height: 85vh;
+    height: 83vh;
 }
 
 .box {
@@ -131,10 +131,10 @@ h3 {
 }
 
 .hack {
-    margin-top: -85vh;
+    margin-top: -83vh;
     margin-right: 0px;
     margin-left: 0px;
-    height: 85vh;
+    height: 83vh;
     z-index: 10;
 }
 
