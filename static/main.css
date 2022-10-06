@@ -51,7 +51,7 @@ html, body {
 }
 
 .ccrop {
-    object-fit:cover; /* Do not scale the image */
+    object-fit:contain; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
 }
 
@@ -92,7 +92,7 @@ h3 {
 }
 
 .credit {
-    margin-top: -10vh !important;
+    margin-top: 0vh !important;
     color: #BD3039;
 }
 

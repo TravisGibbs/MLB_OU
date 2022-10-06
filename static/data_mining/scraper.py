@@ -4,6 +4,9 @@ from bs4 import BeautifulSoup, SoupStrainer
 import json
 import urllib.request, urllib.parse, urllib.error
 import ssl
+from requests_html import HTMLSession
+import cfscrape
+
 from urllib.request import Request, urlopen
 
 from itertools import chain
@@ -113,9 +116,10 @@ def get_HOF():
     return links
 
 def get_WAR_leaders():
-    links = set()
+    links = []
     http = httplib2.Http()
     status, response = http.request('https://www.baseball-reference.com/leaders/WAR_career.shtml')
+    print(response)
     for link in BeautifulSoup(response, parse_only=SoupStrainer('a'), features="html.parser"):
         if link.has_attr('href'):
             if 'players/' in link['href'] and 'shtml' in link['href'] and 'pronunciation' not in link['href']:

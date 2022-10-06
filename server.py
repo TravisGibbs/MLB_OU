@@ -51,8 +51,14 @@ def play():
         cols = cols.intersection(data[players[1]][table][row].keys())
 
         col = sample(cols, 1)[0]
-        p1 = {'name': players[0], "value": float(data[players[0]][table][row][col]), "img":data[players[0]]['img']}
-        p2 = {'name': players[1], "value": float(data[players[1]][table][row][col])  , "img":data[players[1]]['img']}
+        img0 = data[players[0]]['img']
+        img1 = data[players[1]]['img']
+        if 'card' in data[players[0]]:
+            img0 = data[players[0]]['card']
+        if 'card' in data[players[1]]:
+            img1 = data[players[1]]['card']
+        p1 = {'name': players[0], "value": float(data[players[0]][table][row][col]), "img":img0}
+        p2 = {'name': players[1], "value": float(data[players[1]][table][row][col])  , "img":img1}
         q['col'] = "Who had " + col + " in their career?"
         q['players'] = [p1, p2]
         questions.append(q)
