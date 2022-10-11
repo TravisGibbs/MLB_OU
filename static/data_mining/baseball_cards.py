@@ -67,5 +67,41 @@ def round_two():
     print("saving")
     file.write(js_obj)
     file.close()
-    
-round_two()
+
+def correct_questions():
+    f = open('player_data.json')
+    data = json.load(f)
+    for player_name in data:
+        if "pitching_standard" in data[player_name]:
+            pitching_data = data[player_name]["pitching_standard"]["totals"]
+            if "more Saves" in pitching_data:
+                if pitching_data["more Saves"] == '0':
+                    del data[player_name]["pitching_standard"]["totals"]["more Saves"]
+            if "more Hits" in pitching_data:
+                data[player_name]["pitching_standard"]["totals"]["more Hits conceded"] = pitching_data["more Hits"]
+                del data[player_name]["pitching_standard"]["totals"]["more Hits"]
+            if "more Runs" in pitching_data:
+                data[player_name]["pitching_standard"]["totals"]["more Runs conceded"] = pitching_data["more Runs"]
+                del data[player_name]["pitching_standard"]["totals"]["more Runs"]
+            if "more Home Runs" in pitching_data:
+                data[player_name]["pitching_standard"]["totals"]["more Home Runs conceded"] = pitching_data["more Home Runs"]
+                del data[player_name]["pitching_standard"]["totals"]["more Home Runs"]
+            if "more BB" in pitching_data:
+                data[player_name]["pitching_standard"]["totals"]["more BB conceded"] = pitching_data["more BB"]
+                del data[player_name]["pitching_standard"]["totals"]["more BB"]
+            if "more SO" in pitching_data:
+                data[player_name]["pitching_standard"]["totals"]["more Strikeouts"] = pitching_data["more SO"]
+                del data[player_name]["pitching_standard"]["totals"]["more SO"]
+        else:
+            if "more SO" in  data[player_name]['batting_standard']['totals']:
+                data[player_name]['batting_standard']['totals']['more Strikeouts'] = data[player_name]['batting_standard']['totals']["more SO"]
+                del  data[player_name]['batting_standard']['totals']["more SO"]
+    f.close()
+    js_obj = json.dumps(data)
+    file = open('player_data.json', 'w')
+    print("saving")
+    file.write(js_obj)
+    file.close()
+
+correct_questions()
+#round_two()
