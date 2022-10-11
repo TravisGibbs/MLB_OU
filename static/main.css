@@ -64,6 +64,10 @@ h3 {
     height: 83vh;
 }
 
+.scale_text {
+    font-size: 2vw;
+}
+
 .box {
     background-color: rgba(255, 255, 255, 0.5);
     color: black;
