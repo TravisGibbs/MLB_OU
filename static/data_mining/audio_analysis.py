@@ -3,6 +3,7 @@ import urllib.request
 from plotly.subplots import make_subplots
 from scipy.signal import argrelextrema
 import json
+from tqdm import tqdm
 
 from pyAudioAnalysis import ShortTermFeatures as aF
 from pyAudioAnalysis import audioBasicIO as aIO 
@@ -17,10 +18,19 @@ from bs4 import BeautifulSoup, SoupStrainer
 # Example video link
 #https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=single%7Cdouble%7Ctriple%7Chome%5C.%5C.run%7C&hfGT=R%7C&hfPR=&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C2015%7C&hfSit=&player_type=batter&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=6%7C5%7C&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=team-date&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc&type=details&player_id=MIN&ep_game_date=2019-04-20
 
-def gather_hard_hit_videos():
-    prefix = "https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=single%7Cdouble%7Ctriple%7Chome%5C.%5C.run%7C&hfGT=R%7C&hfPR=&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C2015%7C&hfSit=&player_type=batter&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=6%7C5%7C&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=team-date&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc&type=details"#&player_id=MIN&ep_game_date=2019-04-20
+def gather_hard_hit_videos(hits):
+
+    f = open('hits_data.json')
+    data = json.load(f)
+
     http = httplib2.Http()
-    status, response = http.request('https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=single%7Cdouble%7Ctriple%7Chome%5C.%5C.run%7C&hfGT=R%7C&hfPR=&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C2015%7C&hfSit=&player_type=batter&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=6%7C5%7C&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=team-date&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc#results')
+    if hits:
+        prefix = "https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=single%7Cdouble%7Ctriple%7Chome%5C.%5C.run%7C&hfGT=R%7C&hfPR=&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C2015%7C&hfSit=&player_type=batter&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=6%7C5%7C&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=team-date&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc&type=details"#&player_id=MIN&ep_game_date=2019-04-20
+        status, response = http.request('https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=single%7Cdouble%7Ctriple%7Chome%5C.%5C.run%7C&hfGT=R%7C&hfPR=&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C2015%7C&hfSit=&player_type=batter&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=6%7C5%7C&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=team-date&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc#results')
+    else:
+        prefix = "https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=field\.\.out|double\.\.play|force\.\.out|&hfGT=R|&hfPR=&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022|2021|2020|2019|2018|2017|2016|2015|&hfSit=&player_type=batter&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=6|5|&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=team-date&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc&type=details"#&player_id=MIN&ep_game_date=2019-04-20
+        status, response = http.request('https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=field%5C.%5C.out%7Cdouble%5C.%5C.play%7Cforce%5C.%5C.out%7C&hfGT=R%7C&hfPR=&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C2015%7C&hfSit=&player_type=batter&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=6%7C5%7C&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=team-date&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc#results')
+
     soup = BeautifulSoup(response ,features="html.parser")
     rows = soup.find_all("tr")
     hits_page_links = []
@@ -31,7 +41,6 @@ def gather_hard_hit_videos():
     print("grabbing links from hit pages now")
     # Grabbed game videos
     hit_links = []
-    data = {}
     for j,hits_page_link in enumerate(hits_page_links):
         status, response = http.request(hits_page_link)
         # 300 * 4 = 1200 videos
@@ -48,6 +57,8 @@ def gather_hard_hit_videos():
                     data[title]['dist'] = childern[5].get_text()
                     if "singles" in title:
                         data[title]["result"] = "single"
+                    elif "lines out" in title or "flies out" in title:
+                        data[title]["result"] = "out"
                     elif "ground-rule-double" in title:
                         data[title]["result"] = "ground-rule-double"
                     elif "doubles" in title:
@@ -196,13 +207,16 @@ def label_data():
     # f.close()
     f = open('hits_data.json')
     data_to_be_labled = json.load(f)
-
-    for key in data_to_be_labled:
+    keys = list(data_to_be_labled.keys())
+    for i in tqdm (range (len(keys)), 
+               desc="Predicting Audio Times", 
+               ascii=False, ncols=75):
+        key = keys[i]
         try:
-            if "predicted_end_time" in  data_to_be_labled[key]:
-                print("corrected")
-                data_to_be_labled[key]["predicted_end_time"]+=.15
-                continue 
+            if "predicted_end_time" in  data_to_be_labled[key] and "validated" not in data_to_be_labled[key]:
+                continue
+            elif "validated" in data_to_be_labled[key]:
+                data_to_be_labled[key]["validated_time"] = data_to_be_labled[key]["predicted_end_time"]
             try:
                 urllib.request.urlretrieve(data_to_be_labled[key]["video url"], "temp.mp4")
             except:
@@ -217,7 +231,6 @@ def label_data():
             # can adjust these vars for more accurate timestamps
             win, step = 0.01, 0.01
             [f, fn] = aF.feature_extraction(s, fs, int(fs * win), int(fs * step))
-            print(key)
             # Find energy which will be used to detect contact
             time = np.arange(win*10, duration/2 - step, win) 
             energy = f[fn.index('energy'), 10:int(duration/2/win)]
@@ -270,7 +283,7 @@ def label_data():
 
             # fig.update_layout(height=600, width=1000, title_text="Side By Side Subplots")
             # fig.show()
-            data_to_be_labled[key]["predicted_end_time"] = end+.15
+            data_to_be_labled[key]["predicted_end_time"] = end+.25
             os.remove('./temp.wav')
 
         except KeyboardInterrupt:
@@ -287,7 +300,7 @@ def label_data():
 
 label_data()
 #get_data_for_q()
-#gather_hard_hit_videos()
+#gather_hard_hit_videos(False)
 
 # IDEA:
 # Use a request to get a random video of mlb player getting a hit IE:

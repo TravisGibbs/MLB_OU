@@ -45,24 +45,12 @@ function lose() {
     window.location.href= "/lost/"+score.toString()
 }
 
-function wait(milliseconds){
-    return new Promise(resolve => {
-        setTimeout(resolve, milliseconds);
-    });
-  }
-
 function set_players(players) {
-    // $('#player_col_1').css("background-image", "url("+players[0]["img"]+")")
-    // $('#player_col_2').css("background-image", "url("+players[1]["img"]+")")
     $('#player_img_1').attr("src",players[0]["img"]);
     $('#player_img_2').attr("src",players[1]["img"]);
     $('#player_text_1').text(players[0]['name'])
     $('#player_text_2').text(players[1]['name'])
 }
-
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  }
 
 function set_question(q) {
     const  players = q['players']
@@ -86,14 +74,6 @@ function set_question(q) {
 }
 
 $(document).ready(function(){
-    // const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-    // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-    // var height = window.innerHeight
-    // var width = window.innerWidth
-    // if (window.innerWidth/2 < 650) {
-    //     $('#outs').css('margin-top', (height*4/5).toString()+"px !important")
-    // }
-
     set_question(qs[score])
 
     $('#front_1').hover(
@@ -155,7 +135,7 @@ $(document).ready(function(){
                 } else {
                     $( '#front_1' ).addClass('wrong')
                     lives = lives-1
-                    $('#out_'+lives).css("background-color", "#D50032")
+                    $('#out_'+lives).addClass('red')
                     if (lives == 1) {
                         lose()
                     }
@@ -207,7 +187,7 @@ $(document).ready(function(){
                 } else {
                     $( '#front_2' ).addClass('wrong')
                     lives = lives-1
-                    $('#out_'+lives).css("background-color", "#D50032")
+                    $('#out_'+lives).addClass('red')
                     if (lives == 1) {
                         lose()
                     }

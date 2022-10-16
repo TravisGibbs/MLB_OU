@@ -40,7 +40,7 @@ def home():
 def update(data):
     key= data['key']
     time_end = data['value']
-    batted_ball_data[key]['predicted_end_time'] = time_end
+    batted_ball_data[key]['validated_time'] = time_end
     batted_ball_data[key]['validated'] = True
 
     js_obj = json.dumps(batted_ball_data)
@@ -49,19 +49,19 @@ def update(data):
     file.write(js_obj)
     file.close()
 
-
-
 @app.route("/hit")
 def hit():
-    while True:
-        plays = batted_ball_data.keys()
-        play = sample(plays, 1)[0]
-        if 'validated' in play:
-            print("skipped")
-            continue
-        else:
-            break
+    non_validated_data = [key for key in batted_ball_data if "validated" in batted_ball_data[key]]
+    play = sample(non_validated_data, 1)[0]
     return render_template("hit.html", vid_url=batted_ball_data[play]["video url"], title=play, predicted_time=batted_ball_data[play]["predicted_end_time"])
+
+@app.route("/dong")
+def dong():
+    questions = list()
+    validated_keys = [key for key in batted_ball_data if "validated" in batted_ball_data[key]]
+    for key in validated_keys:
+        questions.append({"title":key, "url": batted_ball_data[key]["video url"], "result": batted_ball_data[key]['result'] ,"stop_time": batted_ball_data[key]["validated_time"]})
+    return render_template("dong.html", questions=questions)
 
 @app.route("/play")
 def play():

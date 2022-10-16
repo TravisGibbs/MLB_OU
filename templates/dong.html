@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            let qs = {{ questions| tojson}}
+
+        </script>
+        <style> 
+            @font-face {
+                font-family: mainFont;
+                src: url("static/MLBBLOCK.TTF") format("opentype");
+            }
+            .center {
+                text-align: center !important;
+                align-content: center;
+            }
+
+            .font {
+                font-family: mainFont;
+            }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script> 
+        <script src="https://kit.fontawesome.com/c924f650ab.js" crossorigin="anonymous"></script>
+
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"crossorigin="anonymous">
+        <script type="text/javascript" src="../static/dong.js"></script>
+        <link rel="stylesheet" href="../static/main.css">
+    </head>
+    <body class="">
+        <div class="row noPadMargin">
+            
+            <div id="video_container" class="col flexContainer minHeight">
+               <video class="video-dim" id="main_player">
+                    <source id="videoSrc" src="" type=video/mp4>
+               </video>
+               <i id="play-btn" class="fa-solid fa-baseball-bat-ball abs white big hidden"></i>
+               <i id="repeat-btn" class="fa-solid fa-repeat abs white big hidden"></i>
+               <div id="video-filter" class="filter hidden"></div>
+            </div>
+            
+        </div>
+        <div id="options" class="row button-row noPadMargin white">
+            <div class="col">
+                <h1 type="button" id="dong-btn" class="btn redsxred btn-lg button-pad hidden">Dong <i class="fa-solid fa-explosion"></i></h1>
+            </div>
+            <div class="col">
+                <h1 type="button" id="nodong-btn" class="btn redsxred btn-lg button-pad hidden">No Dong <i class="fa-solid fa-baseball"></i>
+                </h1>
+            </div>
+        </div>
+        <div class="row small-height noPadMargin white">
+            <div class="col noPadMargin small_height">
+                <h2 class="sizeAdj left noPadMargin" id="score">Score: 0</h2>
+            </div>
+            <div class="col noPadMargin small_height">
+                <div class="outs">
+                    <h2 class="sizeAdj noPadMargin">Outs:</h2>
+                    <i id="out_1" class="fa-solid fa-baseball sizeAdj dot"></i>
+                    <i id="out_2" class="fa-solid fa-baseball sizeAdj dot"></i>
+                    <i id="out_3" class="fa-solid fa-baseball sizeAdj dot"></i>
+                  </div>
+            </div>
+        </div>
+    </body>
+</html>
