@@ -1,6 +1,7 @@
 import os
 from random import random, sample
 from flask import Flask, render_template, url_for, json
+from flask_socketio import SocketIO
 
 gif_dict = {"zero":["https://i.pinimg.com/originals/05/88/a0/0588a024b5ba9a1310c2adbd03ae3a2d.gif","https://media1.giphy.com/media/ZIIeLTjVC119j0gKxf/giphy.gif", "https://i.gifer.com/76co.gif", "https://i.pinimg.com/originals/dc/bb/11/dcbb11b1e36e709d309e89a4b123e272.gif", "https://media4.giphy.com/media/3oEduEy55omiUyJWRa/200.gif", "https://1.bp.blogspot.com/-HxtpTBp3PEE/XxhSFxNRRRI/AAAAAAAAuw0/q0Vm-s1QspESuUOkupp7IlKbCxov1WqPwCLcBGAsYHQ/s1600/200.gif", "https://media4.giphy.com/media/3o6Zt1TrXW8uW2lE2I/giphy.gif"], 
     "bad":["https://media3.giphy.com/media/QXg3OUQ5hV74CkYJSa/giphy.gif","https://media3.giphy.com/media/XNDjiA7dGilsm3lX5v/giphy.gif?cid=ecf05e47jg0q1bxknagjo9qht5cyqosfpf8l6o115e6x3ikw&rid=giphy.gif&ct=g", "https://1.bp.blogspot.com/-ocdhldZmvAU/XxhSYhgFeUI/AAAAAAAAuxQ/fwAK5vtuLeM7-ZAwsNBl6mbmdkFVIG7aQCLcBGAsYHQ/s1600/tumblr_mm38p7bIiO1qz5922o1_400.gif", "https://1.bp.blogspot.com/-Kq98uMU_4k4/XxhSVTIsVXI/AAAAAAAAuxE/lZCyH92BRr0-m7lfvGlcnFW567J2xSQ5wCLcBGAsYHQ/s1600/giphy-2.gif", "https://c.tenor.com/xD_c_ZJD6IgAAAAC/strike-ponche.gif"], 
@@ -9,26 +10,58 @@ gif_dict = {"zero":["https://i.pinimg.com/originals/05/88/a0/0588a024b5ba9a1310c
 
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-json_url = os.path.join(SITE_ROOT, "static/data_mining", "player_data.json")
-data = json.load(open(json_url))
+player_data_json_url = os.path.join(SITE_ROOT, "static/data_mining", "player_data.json")
+batted_ball_data_json_url = os.path.join(SITE_ROOT, "static/data_mining", "hits_data.json")
+
+player_data = json.load(open(player_data_json_url))
+batted_ball_data =json.load(open(batted_ball_data_json_url))
 
 pitchers = []
 batters = []
 batter_table_cols = dict()
 pitcher_table_cols = dict()
 
-for player_name in data:
-    player_info = data[player_name]
+for player_name in player_data:
+    player_info = player_data[player_name]
     if "batting_standard" in player_info:
         batters.append(player_name)
     else:
         pitchers.append(player_name)
 
 app = Flask(__name__)
+socketio = SocketIO(app,cors_allowed_origins="*")
 
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@socketio.on("update")
+def update(data):
+    key= data['key']
+    time_end = data['value']
+    batted_ball_data[key]['predicted_end_time'] = time_end
+    batted_ball_data[key]['validated'] = True
+
+    js_obj = json.dumps(batted_ball_data)
+    file = open('./static/data_mining/hits_data.json', 'w')
+    print("saving")
+    file.write(js_obj)
+    file.close()
+
+
+
+@app.route("/hit")
+def hit():
+    while True:
+        plays = batted_ball_data.keys()
+        play = sample(plays, 1)[0]
+        if 'validated' in play:
+            print("skipped")
+            continue
+        else:
+            break
+    return render_template("hit.html", vid_url=batted_ball_data[play]["video url"], title=play, predicted_time=batted_ball_data[play]["predicted_end_time"])
 
 @app.route("/play")
 def play():
@@ -47,18 +80,18 @@ def play():
             players = sample(batters, 2)
             table = 'batting_standard'
 
-        cols = set(data[players[0]][table][row].keys())
-        cols = cols.intersection(data[players[1]][table][row].keys())
+        cols = set(player_data[players[0]][table][row].keys())
+        cols = cols.intersection(player_data[players[1]][table][row].keys())
 
         col = sample(cols, 1)[0]
-        img0 = data[players[0]]['img']
-        img1 = data[players[1]]['img']
-        if 'card' in data[players[0]]:
-            img0 = data[players[0]]['card']
-        if 'card' in data[players[1]]:
-            img1 = data[players[1]]['card']
-        p1 = {'name': players[0], "value": float(data[players[0]][table][row][col]), "img":img0}
-        p2 = {'name': players[1], "value": float(data[players[1]][table][row][col])  , "img":img1}
+        img0 = player_data[players[0]]['img']
+        img1 = player_data[players[1]]['img']
+        if 'card' in player_data[players[0]]:
+            img0 = player_data[players[0]]['card']
+        if 'card' in player_data[players[1]]:
+            img1 = player_data[players[1]]['card']
+        p1 = {'name': players[0], "value": float(player_data[players[0]][table][row][col]), "img":img0}
+        p2 = {'name': players[1], "value": float(player_data[players[1]][table][row][col])  , "img":img1}
         q['col'] = "Who had " + col + " in their career?"
         q['players'] = [p1, p2]
         questions.append(q)

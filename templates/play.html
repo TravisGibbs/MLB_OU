@@ -19,7 +19,7 @@
             }
         </style>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <meta name="viewport" content="width=device-width, initial-scale=1">       
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -53,19 +53,22 @@
             <div id="front_2" class="col player-panel noPadMargin">
             </div>
         </div>
-        <div class="row small-height noPadMargin bottom white">
-            <h2 id="score">Score: 0</h2>
+        <div class="row noPadMargin credit">
+            <p class="noPadMargin">Photos and Data Courtesy of Baseball Reference and Baseball Alamnac</p>
         </div>
-        <div class="abs row noPadMargin credit">
-            <p>Photos and Data Courtesy of Baseball Reference and Baseball Alamnac</p>
+        <div class="row small-height noPadMargin white">
+            <div class="col noPadMargin small_height">
+                <h2 class="sizeAdj left noPadMargin" id="score">Score: 0</h2>
+            </div>
+            <div class="col noPadMargin small_height">
+                <div class="outs">
+                    <h2 class="sizeAdj noPadMargin">Outs:</h2>
+                    <span id="out_1" class="dot"></span>
+                    <span id="out_2" class="dot"></span>
+                    <span id="out_3" class="dot"></span>
+                  </div>
+            </div>
         </div>
-        <div id="outs" class="row small-height noPadMargin bottom white right">
-            <div class="outs">
-                <h2>Outs:</h2>
-                <span id="out_1" class="dot"></span>
-                <span id="out_2" class="dot"></span>
-                <span id="out_3" class="dot"></span>
-              </div>
-        </div>
+        
     </body>
 </html>

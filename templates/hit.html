@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            let label = {{ title| tojson}}
+            let url = {{ vid_url| tojson}}
+            let end_time = {{predicted_time| tojson}}
+
+        </script>
+        <style> 
+            @font-face {
+                font-family: mainFont;
+                src: url("static/MLBBLOCK.TTF") format("opentype");
+            }
+            .center {
+                text-align: center !important;
+                align-content: center;
+            }
+
+            .font {
+                font-family: mainFont;
+            }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script> 
+
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"crossorigin="anonymous">
+        <script type="text/javascript" src="../static/hit.js"></script>
+        <link rel="stylesheet" href="../static/main.css">
+    </head>
+    <body class="">
+        <div class="row fullHeight noPadMargin">
+            <h1>{{title}}</h1>
+            <div class="col flexContainer noPadMargin">
+               <video controls id="main_player">
+                    <source src="{{vid_url}}" type=video/mp4>
+               </video>
+            </div>
+        </div>
+        <div class="row noPadMargin">
+            <h1 type="button" id="play-btn" class="btn redsxred btn-lg font">Begin</h1>
+        </div>
+        <div class="row noPadMargin">
+            <h1 type="button" id="set-btn" class="btn redsxred btn-lg font">Set</h1>
+        </div>
+    </body>
+</html>

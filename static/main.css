@@ -4,6 +4,10 @@ html, body {
     background-color: black;
 }
 
+.fiftyWidth {
+    width: 50vw;
+}
+
 .player-panel {
     background-position: center;
     background-size: 50vw, 40vh;
@@ -93,11 +97,16 @@ h3 {
 }
 
 .outs {
-    width:100vw ;display: flex; justify-content: flex-end; align-items: center;
+    display: flex; justify-content: flex-end; align-items: center; margin-right: 1vw;
+}
+
+.nineFiveWidth {
+    width: 95vw;
 }
 
 .credit {
-    margin-top: 0vh !important;
+    font-size: 1vw;
+    height: 2vh;
     color: #BD3039;
 }
 
@@ -162,13 +171,16 @@ h3 {
     position: absolute;
 }
 
-.score {
-    color: white;
-    margin-top: -99.5vh !important;
-    position: absolute;
-}
-
 container {
     width: 100%;
     padding: 0;
+}
+
+.left {
+    margin-left: 1vw !important;
+}
+
+
+.sizeAdj {
+    font-size: 3vw;
 }
