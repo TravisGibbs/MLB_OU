@@ -2,7 +2,11 @@ html, body {
     padding: 0px;
     margin: 0px;
     background-color: black;
-    overflow: visible; /* Hide scrollbars */
+    overflow: hidden; /* Hide scrollbars */
+}
+
+.overide {
+    overflow: visible !important;
 }
 
 .auto {
