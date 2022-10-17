@@ -51,7 +51,7 @@ def update(data):
 
 @app.route("/hit")
 def hit():
-    non_validated_data = [key for key in batted_ball_data if "validated" in batted_ball_data[key]]
+    non_validated_data = [key for key in batted_ball_data if "validated" not in batted_ball_data[key]]
     play = sample(non_validated_data, 1)[0]
     return render_template("hit.html", vid_url=batted_ball_data[play]["video url"], title=play, predicted_time=batted_ball_data[play]["predicted_end_time"])
 

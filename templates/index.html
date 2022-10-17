@@ -21,27 +21,54 @@
         <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/c924f650ab.js" crossorigin="anonymous"></script>
+
         <script type="text/javascript" src="../static/index.js"></script>
         <link rel="stylesheet" href="../static/main.css">
     </head>
     <body class="main-body">
-        
-        <div class="row fullHeight noPadMargin">
-            <div class="col flexContainer noPadMargin">
-                <div class="flexItem">
-                        <h3 class="">Welcome to the Wax Gauntlet, earn points by picking the player with higher value of any given stat.</h3>
-                        <hr>
-                        <h6 class="">At the top of the screen a stat will appear with the label showing it as a career AVG or total, simply pick the player with the <b>higher</b> number and win!</h6>
-                        <br>
-                        <h6 class="">All active players, hall of famers, and the top 1000 career WAR players are included!</h6>
-                        <br>
-                        <h6 class=""><i>How many can you get correct in a row?</i></h6>
-                        <br>
-                    <a type="button" id="play-btn" href="/play" class="btn redsxred btn-lg font">Enter The Gauntlet</a>
-                </div>
+        <div class="row tenHeight noPadMargin">
+            <h1 class="padded white center">Welcome to my little baseball game website!</h1>
+        </div>
+        <div class="row tenHeight noPadMargin">
+            <h4 class="padded white center">I have built 2 games that are currently availible to play...</h4>
+        </div>
+        <div class="row noPadMargin small-height"></div>
+        <div class="row someHeight noPadMargin">
+            <div class="col noPadMargin">
+                <a href="/play" class="cards btn">
+                    <div class="visible noPadMargin ">
+                        <div class="center">
+                            <h1 class="padded white big auto">Career Gauntlet</h1>
+                            <h3 class="white">Test your knowledge accross baseball history!</h3>
+                            <h1 class="padded white"><i class="white fa-solid fa-address-card"></i></h1>
+                        </div>
+                    </div>
+                </a>
             </div>
-            <div class="col flexContainer noPadMargin">
+            <div class="col noPadMargin">
+                <a href="/dong" class="balls btn">
+                    <div class="visible noPadMargin ">
+                        <div class="center">
+                            <h1 class="padded white big auto">Did it Dong?</h1>
+                            <h3 class="white">Can you identify a dinger on pop alone?</h3>
+                            <h1 class="padded white"><i class="fa-solid fa-baseball"></i></h1>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
+        <div class="small-height">
+
+        </div>
+        <div class="white footer">
+            <p class="visible">
+            This site and its imagery are not endorsed or licesened by the MLB or any broadcaster <br>
+            This site generates no commercial profit and all data and imagrey were scraped from public access points <br>
+            On another note my name Travis Gibbs, I am currently seeking new Grad SWE Roles!<br>
+            <a href="https://www.linkedin.com/in/travis-gibbs-450059195/"><i class="fa-brands fa-linkedin"></i></a>
+            </p>
+        </div>
+        
     </body>
 </html>

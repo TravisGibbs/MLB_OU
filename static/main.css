@@ -4,6 +4,73 @@ html, body {
     background-color: black;
 }
 
+.auto {
+    margin: auto;
+}
+
+
+
+.center {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.visible {
+    background-color: black;
+    filter: opacity(70%);
+    border-radius: 1vw;
+    width: 100%;
+    height: 100%
+}
+
+.balls {
+    border-radius: 1vw;
+    background: url(https://www.gannett-cdn.com/presto/2022/04/24/USAT/5c6a3ea8-2893-4047-9ef9-f77a80005855-USATSI_18099576.jpg);
+    background-position: center;
+    background-size: 95%, 15vh;
+    background-repeat: repeat;
+    padding: .5vw;
+    width: 85%;
+    height: 40vh;
+    margin: auto !important;
+    display:inherit !important;
+  }
+  
+.cards {
+  border-radius: 1vw;
+  background: url(https://wallpapercave.com/wp/wp11147141.jpg);
+  background-position: center;
+  background-size: 95%, 15vh;
+  background-repeat: repeat;
+  padding: .5vw;
+  width: 85%;
+  height: 40vh;
+  margin: auto !important;
+  display:inherit !important;
+}
+
+.center {
+    width: 95%;
+    margin: auto;
+}
+
+.ninetyHeight {
+    height: 90vh;
+}
+
+.tenHeight {
+    height: 10vh;
+}
+
+.hundredHeight {
+    height: 100vh;
+}
+
+
 .fiftyWidth {
     width: 50vw;
 }
@@ -34,9 +101,37 @@ html, body {
     align-items: center;
   }
 
+.big {
+ font-size: 3vw !important;
+}
+
+h1 {
+    font-size: 3vw;
+}
+
+h4 {
+    font-size: 2vw;
+}
+
+.padded {
+    padding: .5vh;
+}
+
 .small-height {
     height: 5vh;
 }
+
+.someHeight {
+    height: 50vh;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
 
 .gray-scale {
     filter: grayscale(75%);
@@ -50,13 +145,65 @@ html, body {
     height: 80vh;
 }
 
-.main-body {
+.backdrop {
+    backdrop-filter: grayscale(100%);
+    height: 100%;
+    width: 100%;
+}
+
+.ballBackground {
+    background-image: url('https://www.gannett-cdn.com/presto/2022/04/24/USAT/5c6a3ea8-2893-4047-9ef9-f77a80005855-USATSI_18099576.jpg');
+    background-position: center center;    
     height: 100vh;
-    width: 100vw;
-    background-image: url('https://media.giphy.com/media/pfjpGYvLMwZ89WOUNz/giphy.gif');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100vw, 100vh;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+@media (min-width:768px) {
+    .ballBackground {
+        background-image: url('https://www.gannett-cdn.com/presto/2022/04/24/USAT/5c6a3ea8-2893-4047-9ef9-f77a80005855-USATSI_18099576.jpg');
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+        min-height: 725px;
+        height: 100vh;
+    }
+}
+
+
+.main-body {
+    background-image: url('https://wallpapers.com/images/file/baseball-on-home-plate-4en18d62788x9ieo.jpg');
+    filter: grayscale(50%) saturate(125%);
+    background-position: center center;    
+    height: 100vh;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+@media (min-width:768px) {
+    .main-body {
+        background-image: url('https://wallpapers.com/images/file/baseball-on-home-plate-4en18d62788x9ieo.jpg');
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center;
+        filter: grayscale(50%) saturate(125%);
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+        min-height: 725px;
+        height: 100vh;
+    }
+}
+
+.paddingTop {
+    margin-top: 4vh !important;
+}
+
+.noMargin {
+    margin: 0px;
 }
 
 .noPadMargin {
@@ -113,6 +260,15 @@ h3 {
 .redsxred {
     color: white;
     background-color: #BD3039;
+}
+
+.back {
+    z-index: -1;
+}
+
+.redsxgreen {
+    color: white;
+    background-color: #57776B;
 }
 
 .video-dim {

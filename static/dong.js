@@ -31,7 +31,7 @@ function show_correct(q, correct) {
         if (correct) {
             // Update Score
             score = score + 1
-            $('#score').text("Score " + score.toString()) 
+            $('#score').text("Score: " + score.toString()) 
         } else {
             // Decrement lives change outs and check for loss
             lives = lives-1
@@ -54,7 +54,10 @@ function set_question(q) {
     console.log("new Q!")
     $('#videoSrc').attr('src', q['url'])
     $('#main_player')[0].load()
-    $("#play-btn").toggleClass('hidden')
+    
+    setTimeout(function(){
+        $("#play-btn").toggleClass('hidden')
+    },500);
 
     $('#dong-btn').on( "click", function() {
         if (!answerin) {
