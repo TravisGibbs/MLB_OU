@@ -125,9 +125,15 @@ h4 {
     height: 45vh;
 }
 
+p {
+    font-size: 1.5vh;
+}
+
 .footer {
     position: fixed;
     margin-top: 12vh;
+    max-height: 20vh;
+    font-size: 1vh;
     width: 100%;
     text-align: center;
   }
