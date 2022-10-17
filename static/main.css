@@ -127,8 +127,7 @@ h4 {
 
 .footer {
     position: fixed;
-    left: 0;
-    bottom: 0;
+    margin-top: 12vh;
     width: 100%;
     text-align: center;
   }
