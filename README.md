@@ -10,5 +10,4 @@ From there I built a basic flask app to allow the user to play two different gam
 
 ![image](https://user-images.githubusercontent.com/28307522/196770289-6552f654-45ac-4f02-a1ac-329d24737522.png)
 
-![image](https://user-images.githubusercontent.com/28307522/196770642-df4f9ee2-7fa6-48d3-bbc9-7f13ddc89006.png)
-
+![image](https://user-images.githubusercontent.com/28307522/196771104-5a1a64cd-931b-4d74-ba0e-960138f9b79d.png)
