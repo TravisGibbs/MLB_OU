@@ -44,6 +44,7 @@ function show_correct(q, correct) {
         }
         $('#video-filter').toggleClass('hidden')
         let q = qs.splice(Math.floor(Math.random()*qs.length), 1)[0]
+        $('#loading-icon').removeClass('hidden')
         set_question(q)
     },9000);
 
@@ -51,13 +52,16 @@ function show_correct(q, correct) {
 }
 
 function set_question(q) {
-    console.log("new Q!")
     $('#videoSrc').attr('src', q['url'])
     $('#main_player')[0].load()
-    
-    setTimeout(function(){
-        $("#play-btn").toggleClass('hidden')
-    },500);
+
+    $('#main_player').on("loadeddata", function() {
+        setTimeout(function(){
+            $('#loading-icon').addClass('hidden')
+            $("#play-btn").removeClass('hidden')
+        }, 200)
+       
+    });
 
     $('#dong-btn').on( "click", function() {
         if (!answerin) {
@@ -82,7 +86,7 @@ function set_question(q) {
     $('#play-btn').on( "click", function() {
         if (!answerin) {
             console.log("played")
-            $("#play-btn").toggleClass('hidden')
+            $("#play-btn").addClass('hidden')
             $('#main_player').get(0).currentTime  = 0
             $('#main_player').get(0).play()
             setTimeout(function(){

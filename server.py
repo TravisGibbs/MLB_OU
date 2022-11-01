@@ -82,8 +82,7 @@ def play():
 
         cols = set(player_data[players[0]][table][row].keys())
         cols = cols.intersection(player_data[players[1]][table][row].keys())
-
-        col = sample(cols, 1)[0]
+        col = sample(sorted(cols), 1)[0]
         img0 = player_data[players[0]]['img']
         img1 = player_data[players[1]]['img']
         if 'card' in player_data[players[0]]:
