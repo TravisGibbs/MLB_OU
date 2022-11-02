@@ -115,6 +115,8 @@ function set_question(q) {
 }
 
 $(document).ready(function(){
+    var video = $('#main_player').get(0);
+    enableInlineVideo(video);
     let q = qs.splice(Math.floor(Math.random()*qs.length), 1)[0]
     console.log(q)
     set_question(q)
