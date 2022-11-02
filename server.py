@@ -1,6 +1,6 @@
 import os
 from random import random, sample
-from flask import Flask, render_template, url_for, json
+from flask import Flask, render_template, url_for, json, request
 from flask_socketio import SocketIO
 
 gif_dict = {"zero":["https://i.pinimg.com/originals/05/88/a0/0588a024b5ba9a1310c2adbd03ae3a2d.gif","https://media1.giphy.com/media/ZIIeLTjVC119j0gKxf/giphy.gif", "https://i.gifer.com/76co.gif", "https://i.pinimg.com/originals/dc/bb/11/dcbb11b1e36e709d309e89a4b123e272.gif", "https://media4.giphy.com/media/3oEduEy55omiUyJWRa/200.gif", "https://1.bp.blogspot.com/-HxtpTBp3PEE/XxhSFxNRRRI/AAAAAAAAuw0/q0Vm-s1QspESuUOkupp7IlKbCxov1WqPwCLcBGAsYHQ/s1600/200.gif", "https://media4.giphy.com/media/3o6Zt1TrXW8uW2lE2I/giphy.gif"], 
@@ -30,6 +30,14 @@ for player_name in player_data:
 
 app = Flask(__name__)
 socketio = SocketIO(app,cors_allowed_origins="*")
+
+@app.route("/iot",  methods=['POST'])
+def iot():
+    record = json.loads(request.data)
+    with open('/data.txt', 'w') as f:
+        f.write(json.dumps(record, indent=2))
+    print(record)
+    
 
 @app.route("/")
 def home():
