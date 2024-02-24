@@ -119,15 +119,15 @@ def get_WAR_leaders():
     links = []
     http = httplib2.Http()
     status, response = http.request('https://www.baseball-reference.com/leaders/WAR_career.shtml')
-    print(response)
     for link in BeautifulSoup(response, parse_only=SoupStrainer('a'), features="html.parser"):
         if link.has_attr('href'):
             if 'players/' in link['href'] and 'shtml' in link['href'] and 'pronunciation' not in link['href']:
-                links.add(link['href'])
+                links.append(link['href'])
     return links
 
-war_players_set = set(get_WAR_leaders())
-hof_players_set = set(get_HOF())
+war_players_set = set([])
+hof_players_set = set([])
+
 active_players_set = set(get_active_players())
 print(len(war_players_set), len(hof_players_set), len(active_players_set))
 players_set = set(chain(war_players_set, hof_players_set, active_players_set))
