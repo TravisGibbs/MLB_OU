@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            let message = {{ message| tojson}}
+        </script>
+        <style> 
+            @font-face {
+                font-family: mainFont;
+                src: url("static/MLBBLOCK.TTF") format("opentype");
+            }
+            .center {
+                text-align: center !important;
+                align-content: center;
+            }
+            .font {
+                font-family: mainFont;
+            }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/c924f650ab.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="../static/elevator.js"></script>
+        <link rel="stylesheet" href="../static/main.css">
+    </head>
+    <body class="main-body-new" id="main" onload="setUpElevator()">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                    <p class="white">At the end of a hall you see a set a wide elevator doors</p>
+            </div>
+            <div class="row justify-content-md-center" id="hide0">
+                <p class="white">As you come closer you feel drawn to step inside</p>
+            </div>
+            <div class="row justify-content-md-center padding" id="hide1">
+                <img class="scale-up" src="../static/elevator.png">
+            </div>
+            <div class="row justify-content-md-center padding" id="hide2">
+                <p class="white">A glowing panel enscribed with "All concievable images lie above" appears</p>
+            </div>
+            <div id="hide3">
+                <div class="row justify-content-md-center padding textSpace" id="textSpace">
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    0
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button0"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    1
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button1"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    2
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button2"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    3
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    4
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button4"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    5
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button5"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    6
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button6"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    7
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button7"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    8
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button8"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    9
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="button9"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    A
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonA"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    B
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonB"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    C
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonC"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    D
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonD"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    E
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonE"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    F
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonF"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    CLR
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonClear"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    CLSDR
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonClose"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    OPNDR
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonOpen"></div>
+                        </div>
+                    </div>
+                    <div class="buttonContainer justify-content-center text-center">
+                        <div class="itsSorted">
+                            <div class="buttonLabel">
+                                <span>
+                                    RNDM
+                                </span>
+                            </div>
+                            <div class="buttonPad" id="buttonRandom"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

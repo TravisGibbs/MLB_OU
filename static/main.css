@@ -58,6 +58,19 @@ html, body {
   display:inherit !important;
 }
 
+.babel {
+    border-radius: 1vw;
+  background: black;
+  background-position: center;
+  background-size: 95%, 15vh;
+  background-repeat: repeat;
+  padding: .5vw;
+  width: 85%;
+  height: 40vh;
+  margin: auto !important;
+  display:inherit !important;
+}
+
 .center {
     width: 95%;
     margin: auto;
@@ -208,6 +221,101 @@ p {
     }
 }
 
+.main-body {
+    background-image: url('https://wallpapers.com/images/file/baseball-on-home-plate-4en18d62788x9ieo.jpg');
+    filter: grayscale(50%) saturate(125%);
+    background-position: center center;    
+    height: 100vh;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+@media (min-width:768px) {
+    .main-body {
+        background-image: url('https://wallpapers.com/images/file/baseball-on-home-plate-4en18d62788x9ieo.jpg');
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center;
+        filter: grayscale(50%) saturate(125%);
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+        min-height: 725px;
+        height: 100vh;
+    }
+}
+
+.main-body-new {
+    height: 100vh;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+@media (min-width:768px) {
+    .main-body-new {
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+        min-height: 725px;
+        height: 100vh;
+    }
+}
+
+
+.pixel {
+    width: 10px;
+    height: 10px;
+}
+
+.color0 {
+    background-color: #000000;
+}
+.color1 {
+    background-color: #006400;
+}
+.color2 {
+    background-color: #708090;
+}
+.color3 {
+    background-color: #4b0082;
+}
+.color4 {
+    background-color: #ff0000;
+}
+.color5 {
+    background-color: #ffa500;
+}
+.color6 {
+    background-color: #ffff00;
+}
+.color7 {
+    background-color: #00ff00;
+}
+.color8 {
+    background-color: #00ffff;
+}
+.color9 {
+    background-color: #0000ff;
+}
+.color10 {
+    background-color: #ff00ff;
+}
+.color11 {
+    background-color: #1e90ff;
+}
+.color12 {
+    background-color: #fa8072;
+}
+.color13 {
+    background-color: #ff1493;
+}
+.color14 {
+    background-color: #00fa9a;
+}
+.color15 {
+    background-color: #fafad2;
+}
+
 .paddingTop {
     margin-top: 4vh !important;
 }
@@ -270,6 +378,69 @@ h3 {
 .redsxred {
     color: white;
     background-color: #BD3039;
+}
+
+.fix {
+    color: white;
+}
+
+.buttonLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+    max-width: 50%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.maxWidthTrace {
+    max-width: 100vw;
+    font-size: xx-small;
+}
+
+.buttonPad {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+    max-width: 50%;
+    height: 100%;
+    border-radius: 20px;
+    background-color: black;
+    border: 4px solid red;
+
+}
+
+.itsSorted {
+    justify-content: space-between;
+    height: 100%;
+    display: flex;
+}
+
+.buttonContainer {
+    height: 8vh;
+    width: 16vh;
+    max-width: 20%;
+    border-radius: 20px;
+    max-width: 15%;
+    margin: 1vh 2vh 1vh 2vh;
+    background-color: white;
+}
+
+.textSpace {
+    background-color: white;
+    color: black;
+    width: 100%;
+    height: 3vh;
+    border: 4px solid red;
+}
+
+.scale-up {
+    width: 20vw;
+    height: 20vw;
 }
 
 .back {

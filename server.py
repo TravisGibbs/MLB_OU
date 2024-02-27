@@ -1,5 +1,5 @@
 import os
-from random import random, sample
+from random import random, sample, choice
 from flask import Flask, render_template, url_for, json, request
 from flask_socketio import SocketIO
 import pandas as pd
@@ -35,6 +35,44 @@ stat_translator_bat = {
     "WAR": "more bWAR"
 }
 
+dehex_d = {
+    "0":"0",
+    "1":"1",
+    "2":"2",
+    "3":"3",
+    "4":"4",
+    "5":"5",
+    "6":"6",
+    "7":"7",
+    "8":"8",
+    "9":"9",
+    "A":"10",
+    "B":"11",
+    "C":"12",
+    "D":"13",
+    "E":"14",
+    "F":"15",
+}
+
+rehex_d = {
+    "0":"0",
+    "1":"1",
+    "2":"2",
+    "3":"3",
+    "4":"4",
+    "5":"5",
+    "6":"6",
+    "7":"7",
+    "8":"8",
+    "9":"9",
+    "10":"A",
+    "11":"B",
+    "12":"C",
+    "13":"D",
+    "14":"E",
+    "15":"F",
+}
+
 stat_translator_pit = {
     "W": "more Wins",
     "L": "more Losses",
@@ -57,6 +95,7 @@ stat_translator_pit = {
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 bat_data_json_url = os.path.join(SITE_ROOT, "static/data_mining", "bat_data.json")
 pit_data_json_url = os.path.join(SITE_ROOT, "static/data_mining", "pit_data.json")
+translation_json_url = os.path.join(SITE_ROOT, "static/data_mining", "translation.json")
 
 batted_ball_data_json_url = os.path.join(SITE_ROOT, "static/data_mining", "hits_data.json")
 
@@ -64,6 +103,8 @@ batted_ball_data =json.load(open(batted_ball_data_json_url))
 
 app = Flask(__name__)
 socketio = SocketIO(app,cors_allowed_origins="*")
+
+tranlator = json.load(open(translation_json_url))
 
 def load_files():
     bat_data = pd.read_json(bat_data_json_url, lines=True)
@@ -75,6 +116,27 @@ batters, pitchers = load_files()
 
 batters = batters[batters.apply(apply_war, axis=1)]
 pitchers = pitchers[pitchers.apply(apply_war, axis=1)]
+
+def pad(unpadded_str):
+    padded_str = unpadded_str
+    if len(unpadded_str) < 4096:
+        padded_str = "0"*(4096-len(unpadded_str)) + unpadded_str
+
+    return padded_str
+
+def scramble(str_arr):
+    new_arr = []
+    for i,str in enumerate(str_arr):
+        new_arr.append(rehex_d[tranlator[i][dehex_d[str]]])
+    return new_arr
+
+@app.route("/again", methods=["GET"])
+def again():
+    return render_template("elevator.html", message="again?")
+
+@app.route("/elevator", methods=["GET"])
+def elevator():
+    return render_template("elevator.html", message="welcome")
 
 @app.route("/iot",  methods=['POST'])
 def iot():
@@ -88,6 +150,21 @@ def iot():
 def home():
     return render_template("index.html")
 
+@app.route("/image/<image_str>", methods=["GET"])
+def image(image_str):
+    if image_str == "empty":
+        image_str = ""
+    elif image_str == "random":
+        image_str = ""
+        hexValues = list(dehex_d.keys())
+        for _i in range(4096):
+            image_str += choice(hexValues)
+    padded_str = pad(image_str)
+
+    str_arr = list(padded_str)
+    str_arr_dehexed = "".join(scramble(str_arr))
+
+    return render_template("imageView.html", image=str_arr_dehexed, input=padded_str)
 
 @socketio.on("update")
 def update(data):
