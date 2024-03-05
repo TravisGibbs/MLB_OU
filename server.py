@@ -1,9 +1,71 @@
 import os
 from random import random, sample, choice
-from flask import Flask, render_template, url_for, json, request
+from flask import Flask, render_template, json, request
 from flask_socketio import SocketIO
 import pandas as pd
 from decimal import *
+import requests
+import bs4
+from io import StringIO
+
+
+base = "https://baseballsavant.mlb.com/statcast_search?"
+hfgt = "R%7C&hfPR=ball%7Cblocked%5C.%5C.ball%7Ccalled%5C.%5C.strike%7Cfoul%7Cfoul%5C.%5C.bunt%7Cbunt%5C.%5C.foul%5C.%5C.tip%7Cfoul%5C.%5C.pitchout%7Cpitchout%7Chit%5C.%5C.by%5C.%5C.pitch%7Chit%5C.%5C.into%5C.%5C.play%7Cmissed%5C.%5C.bunt%7Cfoul%5C.%5C.tip%7Cswinging%5C.%5C.pitchout%7Cswinging%5C.%5C.strike%7Cswinging%5C.%5C.strike%5C.%5C.blocked%7C&"
+seasons = "2024%7C2023%7C2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C&"
+player_id = "453286"
+
+def outcome_filter(pa_result):
+    if "sacrifice" in pa_result or "fielder's choice" in pa_result or "double play" in pa_result or "tripple play" in pa_result:
+        return False
+    return True
+
+def get_outcome(pa_result):
+    if "strikes out" in pa_result:
+        return "SO"
+    elif "lines out" in pa_result or "grounds out" in pa_result or "flies out" in pa_result or "pops out" in pa_result:
+        return "OUT"
+    elif "single" in pa_result:
+        return "1B"
+    elif "double" in pa_result:
+        return "2B"
+    elif "homers" in pa_result:
+        return "HR"
+    elif "triple" in pa_result:
+        return "3B"
+
+def get_data(outs, strikes, balls, player_id):
+    format_string = base+"hfPT=&hfAB=&hfGT="+hfgt+"hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC="+balls+strikes+"%7C&hfSea="+seasons+"hfSit=&player_type=pitcher&hfOuts="+outs+"%7C&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=name&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc&type=details&player_id="+player_id
+    
+    r = requests.get(format_string)
+    table = bs4.BeautifulSoup(r.text, features="lxml").find('table')
+
+    trs = table.find_all("tr")
+
+    video_column = [x.find_all("td")[-1] for x in trs[1:]]
+
+    df = pd.read_html(StringIO(str(table.prettify())))[0]
+
+    print(df.columns)
+
+    df["video_links"] = video_column
+    print(df.shape)
+
+    df.drop(["Pitcher" ,'EV (MPH)', 'LA (°)', 'Dist (ft)', "Count", "Inning", "PA Result", "Unnamed: 14"], axis=1)
+
+
+    pitches = df["Pitch"].tolist()
+
+    k = 20
+    pitch_set=list(set(pitches))
+    for pitch in pitch_set:
+        if pitches.count(pitch)<k:
+            pitches.remove(pitch)
+
+    pitch_set = list(set(pitches))
+
+    df = df[df['Pitch'].isin(pitch_set)]
+    
+    return df.to_json()
 
 def apply_war(row):
     if row["mlb_played_last"] > 1930.0:
@@ -11,12 +73,10 @@ def apply_war(row):
     else:
         return False
 
-
 gif_dict = {"zero":["https://i.pinimg.com/originals/05/88/a0/0588a024b5ba9a1310c2adbd03ae3a2d.gif","https://media1.giphy.com/media/ZIIeLTjVC119j0gKxf/giphy.gif", "https://i.gifer.com/76co.gif", "https://i.pinimg.com/originals/dc/bb/11/dcbb11b1e36e709d309e89a4b123e272.gif", "https://media4.giphy.com/media/3oEduEy55omiUyJWRa/200.gif", "https://1.bp.blogspot.com/-HxtpTBp3PEE/XxhSFxNRRRI/AAAAAAAAuw0/q0Vm-s1QspESuUOkupp7IlKbCxov1WqPwCLcBGAsYHQ/s1600/200.gif", "https://media4.giphy.com/media/3o6Zt1TrXW8uW2lE2I/giphy.gif"], 
     "bad":["https://media3.giphy.com/media/QXg3OUQ5hV74CkYJSa/giphy.gif","https://media3.giphy.com/media/XNDjiA7dGilsm3lX5v/giphy.gif?cid=ecf05e47jg0q1bxknagjo9qht5cyqosfpf8l6o115e6x3ikw&rid=giphy.gif&ct=g", "https://1.bp.blogspot.com/-ocdhldZmvAU/XxhSYhgFeUI/AAAAAAAAuxQ/fwAK5vtuLeM7-ZAwsNBl6mbmdkFVIG7aQCLcBGAsYHQ/s1600/tumblr_mm38p7bIiO1qz5922o1_400.gif", "https://1.bp.blogspot.com/-Kq98uMU_4k4/XxhSVTIsVXI/AAAAAAAAuxE/lZCyH92BRr0-m7lfvGlcnFW567J2xSQ5wCLcBGAsYHQ/s1600/giphy-2.gif", "https://c.tenor.com/xD_c_ZJD6IgAAAAC/strike-ponche.gif"], 
     "okay":["https://media3.giphy.com/media/MfHEgWjIL7mCtYt17w/giphy.gif?cid=ecf05e47jg0q1bxknagjo9qht5cyqosfpf8l6o115e6x3ikw&rid=giphy.gif&ct=g", "https://media0.giphy.com/media/VlMUdPvZ360m6aoi7N/giphy.gif", "https://media3.giphy.com/media/dcj2SyXR36vuw/giphy.gif", "https://i.pinimg.com/originals/b8/bd/29/b8bd293d8235355159e6c5d6553f681c.gif"], 
     "great":["https://media1.giphy.com/media/RbaNKznn9mnJ5UgW56/giphy.gif?cid=6c09b9524169ed8d773be82f3a13657cf2d54c5dbbef2f1e&rid=giphy.gif&ct=g","http://cdn3.vox-cdn.com/assets/4420793/bonds-piro.gif", "https://media2.giphy.com/media/7T5sCHY5Wo8tO5ElNb/giphy.gif?cid=ecf05e47dp7xa0nzorggyrtydqfd3namsvcrf2vowsrpqsbn&rid=giphy.gif&ct=g", "https://media3.giphy.com/media/l2SpUepuM4qgdzbeU/giphy.gif?cid=ecf05e47a1q6aqu3dhx7dbilusm3u4968ip1jz21x8vgnql6&rid=giphy.gif&ct=g", 'https://media3.giphy.com/media/1rMYYnUiubloSDL2yr/giphy.gif?cid=ecf05e47rgit1gaozn0q9s41qdh4dvcuu4sdajreafrvoww5&rid=giphy.gif&ct=g']}
-
 
 stat_translator_bat = {
     "H": "more Hits",
@@ -238,6 +298,15 @@ def lost(score):
         text = "You will be among the legends now..."
         gif_url = sample(gif_dict["great"], 1)[0]
     return render_template('lost.html', score=str(score), gif_url=gif_url, text=text)
-    
+
+@app.route('/pitch_game_data/')
+def pitch_game_data():
+    outs = request.args.get('outs', 0)
+    strikes = request.args.get('strikes', 0)
+    balls = request.args.get('balls', 0)
+    player_id = request.args.get('player_id', 0)
+
+    return get_data(outs=outs,strikes=strikes,balls=balls,player_id=player_id)
+
 if __name__ == "__main__":
     app.run(debug=True)
