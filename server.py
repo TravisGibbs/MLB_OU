@@ -7,65 +7,14 @@ from decimal import *
 import requests
 import bs4
 from io import StringIO
+from flask_cors import CORS 
 
 
 base = "https://baseballsavant.mlb.com/statcast_search?"
 hfgt = "R%7C&hfPR=ball%7Cblocked%5C.%5C.ball%7Ccalled%5C.%5C.strike%7Cfoul%7Cfoul%5C.%5C.bunt%7Cbunt%5C.%5C.foul%5C.%5C.tip%7Cfoul%5C.%5C.pitchout%7Cpitchout%7Chit%5C.%5C.by%5C.%5C.pitch%7Chit%5C.%5C.into%5C.%5C.play%7Cmissed%5C.%5C.bunt%7Cfoul%5C.%5C.tip%7Cswinging%5C.%5C.pitchout%7Cswinging%5C.%5C.strike%7Cswinging%5C.%5C.strike%5C.%5C.blocked%7C&"
 seasons = "2024%7C2023%7C2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C&"
-player_id = "453286"
 
-def outcome_filter(pa_result):
-    if "sacrifice" in pa_result or "fielder's choice" in pa_result or "double play" in pa_result or "tripple play" in pa_result:
-        return False
-    return True
-
-def get_outcome(pa_result):
-    if "strikes out" in pa_result:
-        return "SO"
-    elif "lines out" in pa_result or "grounds out" in pa_result or "flies out" in pa_result or "pops out" in pa_result:
-        return "OUT"
-    elif "single" in pa_result:
-        return "1B"
-    elif "double" in pa_result:
-        return "2B"
-    elif "homers" in pa_result:
-        return "HR"
-    elif "triple" in pa_result:
-        return "3B"
-
-def get_data(outs, strikes, balls, player_id):
-    format_string = base+"hfPT=&hfAB=&hfGT="+hfgt+"hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC="+balls+strikes+"%7C&hfSea="+seasons+"hfSit=&player_type=pitcher&hfOuts="+outs+"%7C&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=name&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc&type=details&player_id="+player_id
-    
-    r = requests.get(format_string)
-    table = bs4.BeautifulSoup(r.text, features="lxml").find('table')
-
-    trs = table.find_all("tr")
-
-    video_column = [x.find_all("td")[-1] for x in trs[1:]]
-
-    df = pd.read_html(StringIO(str(table.prettify())))[0]
-
-    print(df.columns)
-
-    df["video_links"] = video_column
-    print(df.shape)
-
-    df.drop(["Pitcher" ,'EV (MPH)', 'LA (°)', 'Dist (ft)', "Count", "Inning", "PA Result", "Unnamed: 14"], axis=1)
-
-
-    pitches = df["Pitch"].tolist()
-
-    k = 20
-    pitch_set=list(set(pitches))
-    for pitch in pitch_set:
-        if pitches.count(pitch)<k:
-            pitches.remove(pitch)
-
-    pitch_set = list(set(pitches))
-
-    df = df[df['Pitch'].isin(pitch_set)]
-    
-    return df.to_json()
+zones = [1,2,3,4,5,6,7,8,9,11,12,13,14]
 
 def apply_war(row):
     if row["mlb_played_last"] > 1930.0:
@@ -161,10 +110,95 @@ batted_ball_data_json_url = os.path.join(SITE_ROOT, "static/data_mining", "hits_
 
 batted_ball_data =json.load(open(batted_ball_data_json_url))
 
-app = Flask(__name__)
-socketio = SocketIO(app,cors_allowed_origins="*")
-
 tranlator = json.load(open(translation_json_url))
+
+def outcome_filter(pa_result):
+    if "sacrifice" in pa_result or "fielder's choice" in pa_result or "double play" in pa_result or "tripple play" in pa_result:
+        return False
+    return True
+
+def get_outcome(pa_result):
+    if "strikes out" in pa_result or "out on strikes" in pa_result:
+        return "SO"
+    elif "walks" in pa_result or "hit by pitch" in pa_result:
+        return "BB"
+    elif "lines out" in pa_result or "grounds out" in pa_result or "flies out" in pa_result or "pops out" in pa_result or "force out" in pa_result or "fielder's choice" in pa_result:
+        return "OUT"
+    elif "sacrifice" in pa_result:
+        return "SAC"
+    elif "single" in pa_result or "error" in pa_result:
+        return "1B"
+    elif "double" in pa_result:
+        return "2B"
+    elif "homers" in pa_result:
+        return "HR"
+    elif "triple" in pa_result:
+        return "3B"
+    
+    print(pa_result)
+    
+def get_pitch_result(pitch_result):
+    if "strike" in pitch_result or "missed" in pitch_result:
+        return "Strike"
+    elif "foul" in pitch_result and "out" not in pitch_result:
+        return "Foul"
+    elif "ball" in pitch_result:
+        return "Ball"
+    elif "hit" in pitch_result:
+        return "PA"
+    
+def create_or_load_data(outs, strikes, balls, player_id):
+    data_url = os.path.join(SITE_ROOT, "data", player_id+"&outs="+outs+"&strikes="+strikes+"&balls"+balls+".csv")
+    try:
+        data = pd.read_csv(data_url)
+        print("using cached data")
+        return data
+    except:
+        print("fetching data")
+
+    format_string = base+"hfPT=&hfAB=&hfGT="+hfgt+"hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC="+balls+strikes+"%7C&hfSea="+seasons+"hfSit=&player_type=pitcher&hfOuts="+outs+"%7C&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&hfFlag=&metric_1=&group_by=name&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc&type=details&player_id="+player_id
+    
+    r = requests.get(format_string)
+    table = bs4.BeautifulSoup(r.text, features="lxml").find('table')
+
+    trs = table.find_all("tr")
+
+    df = pd.read_html(StringIO(str(table.prettify())))[0]
+
+    df["video_link"] = [x.find_all("a")[-1]['href'] for x in trs[1:]]
+
+    df['PA Result'] = df['PA Result'].apply(lambda x: get_outcome(str(x).lower()))
+
+    df['Pitch Result'] = df['Pitch Result'].apply(lambda x: get_pitch_result(str(x).lower()))
+
+    df = df.dropna(subset=['PA Result', 'Pitch Result']).reset_index()
+
+    df = df.drop(["Pitcher", "MPH", "Spin Rate", "Date", 'EV (MPH)', "Batter", 'LA (°)', 'Dist (ft)', "Count", "Inning", "Unnamed: 14"], axis=1)
+
+    df.to_csv("./data/"+player_id+"&outs="+outs+"&strikes="+strikes+"&balls"+balls+".csv")
+
+    return df
+
+
+def get_data(outs, strikes, balls, player_id):
+
+    df = create_or_load_data(outs, strikes, balls, player_id)    
+
+    pitches = df["Pitch"].tolist()
+
+    options = dict()
+
+    pitch_set=list(set(pitches))
+    for pitch in pitch_set:
+        if type(pitch) == float:
+            continue
+        options[pitch] = dict()
+        temp_df = df[df["Pitch"] == pitch]
+        zones = temp_df["Zone"]
+        for zone in zones:
+            options[pitch][zone] = temp_df[temp_df["Zone"] == zone].sample().to_dict()
+    
+    return json.dumps(options, sort_keys=False)
 
 def load_files():
     bat_data = pd.read_json(bat_data_json_url, lines=True)
@@ -189,6 +223,11 @@ def scramble(str_arr):
     for i,str in enumerate(str_arr):
         new_arr.append(rehex_d[tranlator[i][dehex_d[str]]])
     return new_arr
+
+app = Flask(__name__)
+socketio = SocketIO(app,cors_allowed_origins="*")
+
+CORS(app, resources=r'/api/*')
 
 @app.route("/again", methods=["GET"])
 def again():
@@ -299,14 +338,35 @@ def lost(score):
         gif_url = sample(gif_dict["great"], 1)[0]
     return render_template('lost.html', score=str(score), gif_url=gif_url, text=text)
 
-@app.route('/pitch_game_data/')
-def pitch_game_data():
+@app.route('/api/get_options/', methods=["GET"])
+def get_options():
     outs = request.args.get('outs', 0)
     strikes = request.args.get('strikes', 0)
     balls = request.args.get('balls', 0)
     player_id = request.args.get('player_id', 0)
+    response = app.response_class(
+        response=json.dumps(get_data(outs=outs,strikes=strikes,balls=balls,player_id=player_id)),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
-    return get_data(outs=outs,strikes=strikes,balls=balls,player_id=player_id)
+@app.route('/api/get_url/', methods=["GET"])
+def get_video_resource():
+    url = request.args.get('url', 0)
+    print(url)
+    r = requests.get('https://baseballsavant.mlb.com'+url)
+
+    source = bs4.BeautifulSoup(r.text, features="lxml").find('source')
+
+    response = app.response_class(
+        response=json.dumps({"url": source["src"]}),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return response
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
